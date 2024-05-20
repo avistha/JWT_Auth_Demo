@@ -133,6 +133,46 @@ namespace AuthDemo_Dev_Empower_.Controllers
 
             return token;
         }
+
+        //Route to convert user to admin
+        [HttpPost]
+        [Route("make-admin")]
+        public async Task<IActionResult> MakeAdmin([FromBody] UpdatePermissionDto updatePermissionDto)
+        {
+            var user = await _userManager.FindByNameAsync(updatePermissionDto.UserName);
+
+            if(user is null)
+                return NotFound("User not found");
+
+            var isUserAlreadyAdmin = await _userManager.IsInRoleAsync(user, "ADMIN");
+            if (isUserAlreadyAdmin)
+            {
+                return Ok("User is already Admin.");
+            }
+
+            await _userManager.AddToRoleAsync(user, "ADMIN");
+            return Ok("User converted successfully.");
+        }
+
+        //Route to convert user to owner
+        [HttpPost]
+        [Route("make-owner")]
+        public async Task<IActionResult> MakeOwner([FromBody] UpdatePermissionDto updatePermissionDto)
+        {
+            var user = await _userManager.FindByNameAsync(updatePermissionDto.UserName);
+
+            if (user is null)
+                return NotFound("User not found");
+
+            var isUserAlreadyOwner = await _userManager.IsInRoleAsync(user, StaticUserRoles.OWNER);
+            if (isUserAlreadyOwner)
+            {
+                return Ok("User is already Owner.");
+            }
+
+            await _userManager.AddToRoleAsync(user, StaticUserRoles.OWNER);
+            return Ok("User converted successfully.");
+        }
     }
 }
 
