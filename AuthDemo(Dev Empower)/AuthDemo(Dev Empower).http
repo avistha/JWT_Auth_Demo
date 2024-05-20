@@ -1,0 +1,6 @@
+@AuthDemo_Dev_Empower__HostAddress = http://localhost:5272
+
+GET {{AuthDemo_Dev_Empower__HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
