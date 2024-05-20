@@ -1,5 +1,7 @@
 using AuthDemo_Dev_Empower_.Data;
 using AuthDemo_Dev_Empower_.Entities;
+using AuthDemo_Dev_Empower_.Interfaces;
+using AuthDemo_Dev_Empower_.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +16,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 //Add DB Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
