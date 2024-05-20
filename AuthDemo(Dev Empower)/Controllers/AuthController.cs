@@ -1,4 +1,5 @@
 ﻿using AuthDemo_Dev_Empower_.DTO;
+using AuthDemo_Dev_Empower_.Entities;
 using AuthDemo_Dev_Empower_.OtherObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,11 +15,11 @@ namespace AuthDemo_Dev_Empower_.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _config;
 
-        public AuthController(UserManager<IdentityUser> userManager,
+        public AuthController(UserManager<ApplicationUser> userManager,
                               RoleManager<IdentityRole> roleManager,
                               IConfiguration config)
         {
@@ -57,8 +58,10 @@ namespace AuthDemo_Dev_Empower_.Controllers
             if (isExistsUser != null)
                 return BadRequest("Username Already exists");
 
-            IdentityUser newUser = new IdentityUser()
+            var newUser = new ApplicationUser()
             {
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
                 Email = registerDto.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = registerDto.UserName,
@@ -102,6 +105,8 @@ namespace AuthDemo_Dev_Empower_.Controllers
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
+                new Claim("LastName", user.LastName),
+                new Claim("FirstName", user.FirstName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim("JWTID", Guid.NewGuid().ToString()),
             };
